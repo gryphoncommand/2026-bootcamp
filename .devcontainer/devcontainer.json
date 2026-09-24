@@ -1,9 +1,12 @@
 {
   "name": "FRC Bootcamp (WPILib Java)",
-  "image": "mcr.microsoft.com/devcontainers/java:1-17-bookworm",
+  "image": "mcr.microsoft.com/devcontainers/java:17-bookworm",
   "hostRequirements": {
     "cpus": 2,
     "memory": "8gb"
+  },
+  "remoteEnv": {
+    "JAVA_HOME": "/usr/lib/jvm/msopenjdk-current"
   },
   "customizations": {
     "vscode": {
@@ -12,16 +15,14 @@
         "redhat.vscode-yaml"
       ],
       "settings": {
-        "java.configuration.updateBuildConfiguration": "automatic",
-        "java.test.config": {
-          "workingDirectory": "${workspaceFolder}"
-        },
-        "files.exclude": {
-          "**/.classpath": true,
-          "**/.project": true,
-          "**/.settings": true,
-          "**/.factorypath": true
-        }
+        "java.import.gradle.java.home": "/usr/lib/jvm/msopenjdk-current",
+        "java.configuration.runtimes": [
+          {
+            "name": "JavaSE-17",
+            "path": "/usr/lib/jvm/msopenjdk-current",
+            "default": true
+          }
+        ]
       }
     }
   },
