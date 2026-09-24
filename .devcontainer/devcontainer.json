@@ -1,0 +1,29 @@
+{
+  "name": "FRC Bootcamp (WPILib Java)",
+  "image": "mcr.microsoft.com/devcontainers/java:1-17-bookworm",
+  "hostRequirements": {
+    "cpus": 2,
+    "memory": "8gb"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "vscjava.vscode-java-pack",
+        "redhat.vscode-yaml"
+      ],
+      "settings": {
+        "java.configuration.updateBuildConfiguration": "automatic",
+        "java.test.config": {
+          "workingDirectory": "${workspaceFolder}"
+        },
+        "files.exclude": {
+          "**/.classpath": true,
+          "**/.project": true,
+          "**/.settings": true,
+          "**/.factorypath": true
+        }
+      }
+    }
+  },
+  "postCreateCommand": "./gradlew build"
+}
