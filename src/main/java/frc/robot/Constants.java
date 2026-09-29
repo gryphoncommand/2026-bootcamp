@@ -36,6 +36,12 @@ public final class Constants {
 
     /** Speed multiplier while the slow-mode button is held. */
     public static final double kSlowModeFactor = 0.5;
+
+    /**
+     * WPILib counts counterclockwise turns as positive. If the robot on the field drawing turns
+     * the opposite way from the real Romi, set this to true.
+     */
+    public static final boolean kGyroReversed = false;
   }
 
   /** Numbers for the robot signal light (RSL). */
