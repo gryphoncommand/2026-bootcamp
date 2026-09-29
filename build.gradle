@@ -38,13 +38,19 @@ test {
 }
 
 // Simulation configuration (e.g. environment variables).
-wpi.sim.addGui().defaultEnabled = true
+// In a GitHub Codespace there is no screen and no Romi, so simulation runs "headless":
+// no Sim GUI window and no websocket connection to the Romi. The robot program still
+// starts, sits in Disabled mode, and prints its log messages to the terminal.
+// On a laptop, `./gradlew simulateJava -Pheadless` forces the same behavior.
+def headlessSim = System.getenv("CODESPACES") == "true" || project.hasProperty("headless")
+
+wpi.sim.addGui().defaultEnabled = !headlessSim
 wpi.sim.addDriverstation()
 
-//Sets the websocket client remote host.
+//Sets the websocket client remote host (the Romi's Raspberry Pi).
 wpi.sim.envVar("HALSIMWS_HOST", "10.0.0.2")
-wpi.sim.addWebsocketsServer().defaultEnabled = true
-wpi.sim.addWebsocketsClient().defaultEnabled = true
+wpi.sim.addWebsocketsServer().defaultEnabled = !headlessSim
+wpi.sim.addWebsocketsClient().defaultEnabled = !headlessSim
 
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')
 // in order to make them all available at runtime. Also adding the manifest so WPILib
