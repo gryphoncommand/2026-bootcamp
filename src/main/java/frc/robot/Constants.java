@@ -24,6 +24,7 @@ public final class Constants {
     public static final int kLeftEncoderChannelB = 5;
     public static final int kRightEncoderChannelA = 6;
     public static final int kRightEncoderChannelB = 7;
+    public static final int kRightJetEngine = 8;
 
     /** Encoder counts for one full turn of a wheel. */
     public static final double kCountsPerRevolution = 1440.0;
