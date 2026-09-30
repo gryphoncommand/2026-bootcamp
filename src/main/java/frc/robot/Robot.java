@@ -47,10 +47,12 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
     m_loopCount++;
-    if(m_loopCount%50==0){
-      double seconds = m_loopCount*0.02;
-      DataLogManager.log("Heartbeat: loop "+m_loopCount+" at "+seconds+" s");
+    if(m_loopCount%1==0){
+      double seconds = m_loopCount*2;
+      DataLogManager.log("Heartbeat: Heartbeat "+m_loopCount+" at "+seconds+" s");
     }
+    //1.I changed the division equation to 1, so it counts a loop(or beat) every 1 second. I also changed the second value to be 2x the beat value, so 1 beat for 2 seconds
+    //2.The way this works is the program divides the variable by 1, then compares the remainder to zero, if the remainder is zero, the conditional runs, so if you set it to 2, only numbers cleanly divisible by 2(ever 2 numbers) will be logged, the same is true for every number(50 means every 50th number is logged.)
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
