@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj.DataLogManager;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -17,7 +18,7 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private final RobotContainer m_robotContainer;
-
+    private int m_loopCount = 0;
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -25,6 +26,9 @@ public class Robot extends TimedRobot {
   public Robot() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
+    DataLogManager.start();
+    DataLogManager.log("Robot Program Starting");
+
     m_robotContainer = new RobotContainer();
   }
 
@@ -42,11 +46,18 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    m_loopCount++;
+    if(m_loopCount%50==0){
+      double seconds = m_loopCount*0.02;
+      DataLogManager.log("Heartbeat: loop "+m_loopCount+" at "+seconds+" s");
+    }
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    DataLogManager.log("Entered Disabled");
+  }
 
   @Override
   public void disabledPeriodic() {}
@@ -54,6 +65,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    DataLogManager.log("Entered Auto");
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
@@ -72,6 +84,7 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
+    DataLogManager.log("Entered Teleop");
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -84,6 +97,7 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
+    DataLogManager.log("Entered Test");
     CommandScheduler.getInstance().cancelAll();
   }
 
