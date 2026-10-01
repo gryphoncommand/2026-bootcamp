@@ -4,10 +4,12 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.RomiDrivetrain;
 import frc.robot.subsystems.SignalLight;
+
 
 /**
  * This class is where the robot is described: its subsystems, its commands, and which controller
@@ -21,6 +23,7 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, controllers, and commands. */
   public RobotContainer() {
     configureButtonBindings();
+     new Trigger(m_signalLight::isButtonAPressed).onTrue(Commands.print("Romi button A pressed"));
   }
 
   /** Session 4 fills this in: controller sticks and buttons become commands. */

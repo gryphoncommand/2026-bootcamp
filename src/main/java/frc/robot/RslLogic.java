@@ -21,7 +21,12 @@ public final class RslLogic {
    * @return true when the light should be on
    */
   public static boolean shouldBeOn(boolean enabled, double timeSeconds) {
-    // TODO Session 3: replace this line with the real rule.
-    return false;
+    if (!enabled) {
+      return true; // solid on while disabled
+    }
+        // How far are we into the current blink cycle?
+    double secondsIntoCycle = timeSeconds % SignalLightConstants.kBlinkPeriodSeconds;
+    // On for the first half of the cycle, off for the second half.
+    return secondsIntoCycle < SignalLightConstants.kBlinkPeriodSeconds / 2;
   }
 }
