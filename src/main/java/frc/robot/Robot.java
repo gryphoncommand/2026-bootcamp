@@ -5,8 +5,11 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.romi.OnBoardIO;
+import edu.wpi.first.wpilibj.romi.OnBoardIO.ChannelMode;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -18,6 +21,7 @@ public class Robot extends TimedRobot {
 
   private final RobotContainer m_robotContainer;
 
+  private final OnBoardIO m_onboardIO = new OnBoardIO(ChannelMode.OUTPUT, ChannelMode.OUTPUT);
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -46,7 +50,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    m_onboardIO.setYellowLed(true);
+  }
 
   @Override
   public void disabledPeriodic() {}
@@ -64,7 +70,12 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    m_onboardIO.setYellowLed(true);
+    Commands.waitSeconds(.2);
+    m_onboardIO.setYellowLed(false);
+    Commands.waitSeconds(.2);
+  }
 
   @Override
   public void teleopInit() {
@@ -79,7 +90,12 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    m_onboardIO.setYellowLed(true);
+    Commands.waitSeconds(.2);
+    m_onboardIO.setYellowLed(false);
+    Commands.waitSeconds(.2);
+  }
 
   @Override
   public void testInit() {
@@ -89,5 +105,10 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+    m_onboardIO.setYellowLed(true);
+    Commands.waitSeconds(.2);
+    m_onboardIO.setYellowLed(false);
+    Commands.waitSeconds(.2);
+  }
 }
