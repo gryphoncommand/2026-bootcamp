@@ -5,9 +5,11 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.DriveConstants;
 
 /** The Romi's two drive motors and two wheel encoders. */
@@ -26,9 +28,12 @@ public class RomiDrivetrain extends SubsystemBase implements AutoCloseable {
   private final DifferentialDrive m_diffDrive =
       new DifferentialDrive(m_leftMotor::set, m_rightMotor::set);
 
+  private XboxController m_drivecontroller = new XboxController(0);
+
   /** Creates a new RomiDrivetrain. */
   public RomiDrivetrain() {
     // One encoder count is this many inches of wheel travel.
+
     double inchesPerCount =
         (Math.PI * DriveConstants.kWheelDiameterInch) / DriveConstants.kCountsPerRevolution;
     m_leftEncoder.setDistancePerPulse(inchesPerCount);
@@ -64,7 +69,7 @@ public class RomiDrivetrain extends SubsystemBase implements AutoCloseable {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    arcadeDrive(m_drivecontroller.getLeftY(), m_drivecontroller.getLeftX());
   }
 
   @Override
