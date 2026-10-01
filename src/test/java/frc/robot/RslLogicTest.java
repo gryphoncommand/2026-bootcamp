@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /** Checks the robot signal light rule. Each method is one test. */
-@Disabled("Session 3: delete this line, then make these tests pass")
 class RslLogicTest {
   @Test
   void disabledRobotIsSolidOn() {
