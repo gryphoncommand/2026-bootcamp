@@ -6,6 +6,10 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.ArcadeDriveCommand;
 import frc.robot.subsystems.RomiDrivetrain;
 import frc.robot.subsystems.SignalLight;
 
@@ -18,13 +22,33 @@ public class RobotContainer {
   private final RomiDrivetrain m_drivetrain = new RomiDrivetrain();
   private final SignalLight m_signalLight = new SignalLight();
 
+  private final CommandXboxController m_controller =
+      new CommandXboxController(OperatorConstants.kDriverControllerPort);
+
   /** The container for the robot. Contains subsystems, controllers, and commands. */
   public RobotContainer() {
     configureButtonBindings();
   }
 
   /** Session 4 fills this in: controller sticks and buttons become commands. */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+    m_drivetrain.setDefaultCommand(
+        new ArcadeDriveCommand(m_drivetrain, m_controller::getLeftY, m_controller::getRightX));
+
+    m_controller
+        .rightBumper()
+        .whileTrue(
+            new ArcadeDriveCommand(
+                m_drivetrain,
+                () -> m_controller.getLeftY() * DriveConstants.kSlowModeFactor,
+                () -> m_controller.getRightX() * DriveConstants.kSlowModeFactor));
+
+    m_controller
+        .a()
+        .whileTrue(
+            m_signalLight.startEnd(
+                () -> m_signalLight.setGreen(true), () -> m_signalLight.setGreen(false)));
+  }
 
   /**
    * The command to run in autonomous. Session 6 replaces this with a chooser on the dashboard.
