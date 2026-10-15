@@ -17,7 +17,11 @@ public final class Constants {
   }
 
   /** Numbers that describe the Romi's drivetrain hardware. */
-  public static final class DriveConstants {
+  public static final class DriveConstants {    /**
+     * WPILib counts counterclockwise turns as positive. If the robot on the field drawing turns
+     * the opposite way from the real Romi, set this to true.
+     */
+    public static final boolean kGyroReversed = false;
     public static final int kLeftMotorChannel = 0;
     public static final int kRightMotorChannel = 1;
     public static final int kLeftEncoderChannelA = 4;
