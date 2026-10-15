@@ -24,6 +24,12 @@ public final class Constants {
     public static final int kLeftEncoderChannelB = 5;
     public static final int kRightEncoderChannelA = 6;
     public static final int kRightEncoderChannelB = 7;
+    
+     /**
+     * WPILib counts counterclockwise turns as positive. If the robot on the field drawing turns
+     * the opposite way from the real Romi, set this to true.
+     */
+    public static final boolean kGyroReversed = false;
 
     /** Encoder counts for one full turn of a wheel. */
     public static final double kCountsPerRevolution = 1440.0;
