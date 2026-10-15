@@ -18,7 +18,7 @@ public final class DriveInput {
    * @return the value to use, with tiny wobble removed
    */
   public static double applyDeadband(double rawAxis) {
-      if (Math.abs(rawAxis) < DriveConstants.kDeadband) {
+    if (Math.abs(rawAxis) < DriveConstants.kDeadband) {
       return 0.0;
     }
     return rawAxis;

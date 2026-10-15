@@ -33,27 +33,27 @@ public class RobotContainer {
     m_drivetrain.setDefaultCommand(new ArcadeDriveCommand(m_drivetrain, m_controller::getLeftY, m_controller::getRightX));
 
     // Hold the right bumper for half speed. While held, this command replaces the default one.
-    m_controller
-        .rightBumper()
-        .whileTrue(
-            new ArcadeDriveCommand(
-                m_drivetrain,
-                () -> m_controller.getLeftY() * DriveConstants.kSlowModeFactor,
-                () -> m_controller.getRightX() * DriveConstants.kSlowModeFactor));
+    m_controller.rightBumper().whileTrue(
+      new ArcadeDriveCommand(
+        m_drivetrain,
+        () -> m_controller.getLeftY() * DriveConstants.kSlowModeFactor,
+        () -> m_controller.getRightX() * DriveConstants.kSlowModeFactor
+      )
+    );
 
     // Hold A on the controller to light the green LED on the Romi.
-    m_controller
-        .a()
-        .whileTrue(
-            m_signalLight.startEnd(
-                () -> m_signalLight.setGreen(true), () -> m_signalLight.setGreen(false)));
+    m_controller.a().whileTrue(
+      m_signalLight.startEnd( () -> m_signalLight.setGreen(true), () -> m_signalLight.setGreen(false))
+    );
   }
 
   // The driver's controller, plugged into USB port 0 on the Driver Station.
   private final CommandXboxController m_controller = new CommandXboxController(OperatorConstants.kDriverControllerPort);
+
   /**
    * 
-   * The command to run in autonomous. Session 6 replaces this with a chooser on the dashboard.
+   * The command to run in autonomous. Session 6 replaces this with a chooser on
+   * the dashboard.
    *
    * @return the command to run in autonomous
    */

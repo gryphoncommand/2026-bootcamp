@@ -17,20 +17,16 @@ public class RomiDrivetrain extends SubsystemBase implements AutoCloseable {
   private final Spark m_rightMotor = new Spark(DriveConstants.kRightMotorChannel);
 
   // The Romi's encoders are wired to DIO pins 4/5 (left) and 6/7 (right).
-  private final Encoder m_leftEncoder =
-      new Encoder(DriveConstants.kLeftEncoderChannelA, DriveConstants.kLeftEncoderChannelB);
-  private final Encoder m_rightEncoder =
-      new Encoder(DriveConstants.kRightEncoderChannelA, DriveConstants.kRightEncoderChannelB);
+  private final Encoder m_leftEncoder = new Encoder(DriveConstants.kLeftEncoderChannelA, DriveConstants.kLeftEncoderChannelB);
+  private final Encoder m_rightEncoder = new Encoder(DriveConstants.kRightEncoderChannelA, DriveConstants.kRightEncoderChannelB);
 
   // Turns "forward" and "turn" speeds into a speed for each side.
-  private final DifferentialDrive m_diffDrive =
-      new DifferentialDrive(m_leftMotor::set, m_rightMotor::set);
+  private final DifferentialDrive m_diffDrive = new DifferentialDrive(m_leftMotor::set, m_rightMotor::set);
 
   /** Creates a new RomiDrivetrain. */
   public RomiDrivetrain() {
     // One encoder count is this many inches of wheel travel.
-    double inchesPerCount =
-        (Math.PI * DriveConstants.kWheelDiameterInch) / DriveConstants.kCountsPerRevolution;
+    double inchesPerCount = (Math.PI * DriveConstants.kWheelDiameterInch) / DriveConstants.kCountsPerRevolution;
     m_leftEncoder.setDistancePerPulse(inchesPerCount);
     m_rightEncoder.setDistancePerPulse(inchesPerCount);
     resetEncoders();
