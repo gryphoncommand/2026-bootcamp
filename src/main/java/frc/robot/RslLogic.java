@@ -22,6 +22,7 @@ public final class RslLogic {
    */
   public static boolean shouldBeOn(boolean enabled, double timeSeconds) {
     // TODO Session 3: replace this line with the real rule.
+    
     return false;
   }
 }

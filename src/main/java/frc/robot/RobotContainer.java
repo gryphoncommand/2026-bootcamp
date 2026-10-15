@@ -32,9 +32,8 @@ public class RobotContainer {
 
   /** Session 4 fills this in: controller sticks and buttons become commands. */
   private void configureButtonBindings() {
-    m_drivetrain.setDefaultCommand(
-        new ArcadeDriveCommand(m_drivetrain, m_controller::getLeftY, m_controller::getRightX));
-
+    m_drivetrain.setDefaultCommand(new ArcadeDriveCommand(m_drivetrain, m_controller::getLeftY, m_controller::getRightX));
+      
     m_controller
         .rightBumper()
         .whileTrue(
