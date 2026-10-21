@@ -1,0 +1,4 @@
+- Github: @PurpleFire6
+- Grade: 11th
+- I joined programming because I have an interest in computer science and I was looking forward to hanging out with everyone on the team. 
+- I don't have any goals for what I want to build just yet - for now, I want to see what's possible. 
