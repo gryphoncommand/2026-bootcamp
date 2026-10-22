@@ -10,11 +10,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ArcadeDriveCommand;
 import frc.robot.commands.DriveDistance;
 import frc.robot.commands.TurnDegrees;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.RomiDrivetrain;
 import frc.robot.subsystems.SignalLight;
 
@@ -26,6 +28,7 @@ public class RobotContainer {
   // The robot's subsystems. Each one is an object built from its class.
   private final RomiDrivetrain m_drivetrain = new RomiDrivetrain();
   private final SignalLight m_signalLight = new SignalLight();
+  private final Arm m_arm = new Arm();
 
   // The driver's controller, plugged into USB port 0 on the Driver Station.
   private final CommandXboxController m_controller =
@@ -62,6 +65,16 @@ public class RobotContainer {
             m_signalLight.startEnd(
                 () -> m_signalLight.setGreen(true), () -> m_signalLight.setGreen(false)));
 
+    // Arm: hold the D-pad to move the lift (up/down) and the wrist (left/right) a little per loop.
+    m_controller.povUp().whileTrue(m_arm.run(() -> m_arm.nudgeLift(ArmConstants.kNudgePerLoop)));
+    m_controller.povDown().whileTrue(m_arm.run(() -> m_arm.nudgeLift(-ArmConstants.kNudgePerLoop)));
+    m_controller.povRight().whileTrue(m_arm.run(() -> m_arm.nudgeTilt(ArmConstants.kNudgePerLoop)));
+    m_controller.povLeft().whileTrue(m_arm.run(() -> m_arm.nudgeTilt(-ArmConstants.kNudgePerLoop)));
+
+    // X opens the gripper, B closes it.
+    m_controller.x().onTrue(m_arm.openGripper());
+    m_controller.b().onTrue(m_arm.closeGripper());
+
     // Pressing button A on the Romi's control board prints a message.
     new Trigger(m_signalLight::isButtonAPressed).onTrue(Commands.print("Romi button A pressed"));
   }
@@ -76,6 +89,17 @@ public class RobotContainer {
             new DriveDistance(0.5, 12.0, m_drivetrain),
             new TurnDegrees(0.5, 90.0, m_drivetrain),
             new DriveDistance(0.5, 12.0, m_drivetrain)));
+    m_autoChooser.addOption(
+        "Grab and go",
+        Commands.sequence(
+            m_arm.closeGripper(),
+            Commands.waitSeconds(ArmConstants.kServoTravelSeconds),
+            m_arm.liftTo(ArmConstants.kLiftUp),
+            Commands.waitSeconds(ArmConstants.kServoTravelSeconds),
+            new DriveDistance(0.5, 12.0, m_drivetrain),
+            m_arm.liftTo(ArmConstants.kLiftDown),
+            Commands.waitSeconds(ArmConstants.kServoTravelSeconds),
+            m_arm.openGripper()));
     SmartDashboard.putData("Auto", m_autoChooser);
   }
 

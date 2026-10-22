@@ -44,6 +44,29 @@ public final class Constants {
     public static final boolean kGyroReversed = false;
   }
 
+  /**
+   * Numbers for the Romi arm kit: three servos plugged into the Romi's external pins. The Romi
+   * Web UI decides which EXT pin is which PWM channel; confirm these there.
+   */
+  public static final class ArmConstants {
+    public static final int kLiftServoChannel = 2;
+    public static final int kTiltServoChannel = 3;
+    public static final int kGripperServoChannel = 4;
+
+    // Servo positions from 0.0 to 1.0. Find the real limits on the hardware before trusting these.
+    public static final double kLiftDown = 0.2;
+    public static final double kLiftUp = 0.8;
+    public static final double kTiltLevel = 0.5;
+    public static final double kGripperOpen = 0.2;
+    public static final double kGripperClosed = 0.8;
+
+    /** How far a servo moves per 20 ms loop while a nudge button is held. 0.01 is half the range per second. */
+    public static final double kNudgePerLoop = 0.01;
+
+    /** How long an auto routine waits for a servo to arrive before doing the next thing. */
+    public static final double kServoTravelSeconds = 1.0;
+  }
+
   /** Numbers for the robot signal light (RSL). */
   public static final class SignalLightConstants {
     /** One full on-then-off blink takes this many seconds while the robot is enabled. */
