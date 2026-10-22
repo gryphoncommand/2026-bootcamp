@@ -42,5 +42,8 @@ public final class Constants {
   public static final class SignalLightConstants {
     /** One full on-then-off blink takes this many seconds while the robot is enabled. */
     public static final double kBlinkPeriodSeconds = 1.0;
+
+    /** One Morse code unit. A dot is one unit, a dash is three. Exact in binary on purpose. */
+    public static final double kMorseUnitSeconds = 0.25;
   }
 }
