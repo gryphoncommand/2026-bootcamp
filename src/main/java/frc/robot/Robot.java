@@ -51,11 +51,25 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
 
-    // Heartbeat: 50 loops is one second, so log once per second, not 50 times.
+    // Uptime clock: 50 loops is one second, so log once per second, not 50 times.
     m_loopCount++;
     if (m_loopCount % 50 == 0) {
-      double seconds = m_loopCount * 0.02;
-      DataLogManager.log("Heartbeat: loop " + m_loopCount + " at " + seconds + " s");
+      int totalSeconds = m_loopCount / 50; // whole seconds: int division drops the fraction
+      int minutes = totalSeconds / 60;
+      int seconds = totalSeconds % 60; // what is left after the whole minutes
+
+      // Build the text one piece at a time so the seconds always get two digits.
+      String uptime = minutes + ":";
+      if (seconds < 10) {
+        uptime = uptime + "0";
+      }
+      uptime = uptime + seconds;
+      DataLogManager.log("Uptime " + uptime);
+
+      // This condition is true on exactly one loop, so the line logs exactly once.
+      if (totalSeconds == 60) {
+        DataLogManager.log("One minute of uptime");
+      }
     }
   }
 
