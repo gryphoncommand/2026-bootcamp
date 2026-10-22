@@ -9,7 +9,7 @@ The robot is a **Romi**. Code you write here runs in unit tests in your Codespac
 Every session starts and ends the same way. It becomes muscle memory.
 
 1. **Open your Codespace** from [github.com/codespaces](https://github.com/codespaces) (or create one from the green **Code** button the first time).
-2. **Refresh `main`.** Switch to `main` and pull, so you start from the latest code.
+2. **Refresh `main`.** Switch to `main` and pull, so you start from the latest code. `main` moves: after every session a mentor merges that session's finished exercise into it, so the next session starts from a working robot for everyone.
 3. **Create a branch** named `yourname/session-N`, for example `yourname/session-2`. Never work on `main`. It is protected.
 4. **Write your code.**
 5. **Test your code.** In the terminal:
@@ -23,6 +23,8 @@ Every session starts and ends the same way. It becomes muscle memory.
 8. **Stop your Codespace** when you are done for the day. It uses your personal free quota.
 
 A mentor merges finished work. Pull requests and code review come after the bootcamp.
+
+Your own branch keeps your work forever. You do not need it next session: `main` already has the exercise, done the reference way.
 
 ## Layout
 
@@ -56,11 +58,14 @@ Some test classes on `main` are marked `@Disabled("Session N: ...")`. They descr
 
 ## Solutions
 
-Completed exercises live on branches named `solution/session-N`. Use them after a session to compare with your own work.
+Completed exercises live on branches named `solution/session-N`. Use them after a session to compare with your own work. The challenges at the end of each session have no published solution. Solve them yourself.
 
 ## Mentor setup notes
 
 - **Project generation.** Use the WPILib VS Code extension: *Create a new project* → Template → Java → Romi → **Romi Command Bot**, team number 3966, package `frc.robot`, **Enable Desktop Support** checked.
 - **Branch protection on `main`.** Require the `build` status check and block force pushes.
+- **`main` moves during the bootcamp.** The tag `bootcamp-start` marks the commit `main` starts from. Before Session N (for N from 3 on), merge `solution/session-(N-1)` into `main` with a pull request so students who refresh `main` get the previous exercise done. Before Capstone 1, merge `solution/session-5`; before Capstone 2, merge `solution/capstone-1`. Never merge a `*-challenge` branch.
+- **Resetting for the next bootcamp.** Temporarily allow force pushes in the branch protection rule, then `git push --force origin bootcamp-start:main`, then turn the protection back on. Students' branches from the previous run can be deleted or left; they do not affect `main`.
+- **Solution branches.** `solution/session-2` through `solution/session-5`, `solution/capstone-1`, and `solution/capstone-2` chain in that order, each based on the one before. `solution/session-N-challenge` and `solution/capstone-1-challenge` branch off their session's solution and hold the challenge reference solutions. They are CI-verified on every push. When an exercise changes, rebuild the chain from that session on.
 - **Codespaces.** Students use their personal free quota. The dev container requests a 2-core machine and runs `./gradlew build` after creation so WPILib dependencies are cached.
 - **Romi.** Runs from a programming laptop with WPILib installed, connected to the Romi's Wi-Fi. Codespaces cannot reach it.
