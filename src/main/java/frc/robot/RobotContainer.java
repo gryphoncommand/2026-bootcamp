@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ArcadeDriveCommand;
+import frc.robot.commands.DriveArc;
 import frc.robot.commands.DriveDistance;
 import frc.robot.commands.TurnDegrees;
 import frc.robot.subsystems.RomiDrivetrain;
@@ -76,7 +77,31 @@ public class RobotContainer {
             new DriveDistance(0.5, 12.0, m_drivetrain),
             new TurnDegrees(0.5, 90.0, m_drivetrain),
             new DriveDistance(0.5, 12.0, m_drivetrain)));
+    m_autoChooser.addOption("Square", polygon(4, 12.0));
+    m_autoChooser.addOption("Triangle", polygon(3, 12.0));
+    m_autoChooser.addOption("Hexagon", polygon(6, 8.0));
+    m_autoChooser.addOption(
+        "S-curve",
+        Commands.sequence(
+            new DriveArc(0.5, 0.4, 18.0, m_drivetrain),
+            new DriveArc(0.5, -0.4, 18.0, m_drivetrain)));
     SmartDashboard.putData("Auto", m_autoChooser);
+  }
+
+  /**
+   * A routine that drives a regular polygon: a side, then a turn, repeated once per side. The turn
+   * at each corner is the exterior angle, 360 divided by the number of sides.
+   */
+  private Command polygon(int sides, double sideInch) {
+    double turnDegrees = 360.0 / sides;
+    Command routine = Commands.none();
+    for (int i = 0; i < sides; i++) {
+      routine =
+          routine.andThen(
+              new DriveDistance(0.5, sideInch, m_drivetrain),
+              new TurnDegrees(0.5, turnDegrees, m_drivetrain));
+    }
+    return routine;
   }
 
   /**
