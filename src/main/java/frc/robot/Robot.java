@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj.DataLogManager;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -17,6 +18,8 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private final RobotContainer m_robotContainer;
+  // Counts every 20 ms loop since the program started.
+  private int m_loopCount = 0;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -25,6 +28,10 @@ public class Robot extends TimedRobot {
   public Robot() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
+    // Start writing log messages to the console and to a .wpilog file.
+    DataLogManager.start();
+    DataLogManager.log("Robot program starting");
+
     m_robotContainer = new RobotContainer();
   }
 
@@ -42,11 +49,28 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    
+    // 50 loops is one second, so log once per second, not 50 times.
+    m_loopCount++;
+    if (m_loopCount % 50 == 0) {
+      double onesSeconds = (m_loopCount/50)%10;
+      double tensSeconds = 1.0*(int)(m_loopCount/500)%6;
+      double minutes = 1.0*(int)(m_loopCount/3000);
+      
+      if (minutes == 1 && tensSeconds == 0 && onesSeconds == 0) {
+      DataLogManager.log("One minute of uptime. Uptime " + (int)minutes + ":" + (int)tensSeconds + (int)onesSeconds);
+      } else {
+      DataLogManager.log("Uptime " + (int)minutes + ":" + (int)tensSeconds + (int)onesSeconds);
+      }
+    }
+
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    DataLogManager.log("Entered Disabled");
+  }
 
   @Override
   public void disabledPeriodic() {}
@@ -54,6 +78,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    DataLogManager.log("Entered Autonomous");
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
@@ -68,6 +93,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    DataLogManager.log("Entered Teleoperated");
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
@@ -83,6 +109,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testInit() {
+    DataLogManager.log("Entered Test");
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
   }
