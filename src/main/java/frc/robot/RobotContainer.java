@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ArcadeDriveCommand;
+import frc.robot.commands.TurnAroundCommand;
 import frc.robot.subsystems.RomiDrivetrain;
 import frc.robot.subsystems.SignalLight;
 
@@ -53,6 +54,9 @@ public class RobotContainer {
         .whileTrue(
             m_signalLight.startEnd(
                 () -> m_signalLight.setGreen(true), () -> m_signalLight.setGreen(false)));
+
+    // Press Y to turn around. The command interrupts driving, finishes, and driving resumes.
+    m_controller.y().onTrue(new TurnAroundCommand(m_drivetrain));
 
     // Pressing button A on the Romi's control board prints a message.
     new Trigger(m_signalLight::isButtonAPressed).onTrue(Commands.print("Romi button A pressed"));

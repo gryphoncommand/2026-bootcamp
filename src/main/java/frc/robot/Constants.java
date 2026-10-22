@@ -36,6 +36,12 @@ public final class Constants {
 
     /** Speed multiplier while the slow-mode button is held. */
     public static final double kSlowModeFactor = 0.5;
+
+    /** Rotation speed for the turn-around button. Positive is counterclockwise. */
+    public static final double kTurnAroundSpeed = 0.5;
+
+    /** How long a turn at kTurnAroundSpeed takes to cover 180 degrees. Tune this on the Romi. */
+    public static final double kTurnAroundSeconds = 1.2;
   }
 
   /** Numbers for the robot signal light (RSL). */
