@@ -54,6 +54,9 @@ public class RobotContainer {
             m_signalLight.startEnd(
                 () -> m_signalLight.setGreen(true), () -> m_signalLight.setGreen(false)));
 
+    // Press Start to put the robot back at the origin on the field drawing.
+    m_controller.start().onTrue(m_drivetrain.runOnce(m_drivetrain::resetOdometry));
+
     // Pressing button A on the Romi's control board prints a message.
     new Trigger(m_signalLight::isButtonAPressed).onTrue(Commands.print("Romi button A pressed"));
   }

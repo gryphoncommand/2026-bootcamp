@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import edu.wpi.first.hal.HAL;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.EncoderSim;
 import frc.robot.Constants.DriveConstants;
 import org.junit.jupiter.api.AfterEach;
@@ -67,5 +68,27 @@ class RomiDrivetrainTest {
     m_rightEncoderSim.setCount(0);
 
     assertEquals(CIRCUMFERENCE_INCH / 2.0, m_drivetrain.getAverageDistanceInch(), DELTA);
+  }
+
+  @Test
+  void odometryFollowsTheWheels() {
+    // Both wheels turn once: the robot drove one circumference straight ahead.
+    m_leftEncoderSim.setCount(1440);
+    m_rightEncoderSim.setCount(1440);
+    m_drivetrain.periodic(); // odometry only updates when the scheduler calls this
+
+    assertEquals(Units.inchesToMeters(CIRCUMFERENCE_INCH), m_drivetrain.getPose().getX(), DELTA);
+  }
+
+  @Test
+  void resetOdometryGoesBackToTheOrigin() {
+    m_leftEncoderSim.setCount(1440);
+    m_rightEncoderSim.setCount(1440);
+    m_drivetrain.periodic();
+
+    m_drivetrain.resetOdometry();
+
+    assertEquals(0.0, m_drivetrain.getPose().getX(), DELTA);
+    assertEquals(0.0, m_drivetrain.getPose().getY(), DELTA);
   }
 }

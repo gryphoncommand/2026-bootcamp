@@ -8,6 +8,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
@@ -42,6 +44,10 @@ public class RomiDrivetrain extends SubsystemBase implements AutoCloseable {
 
   // A drawing of the field with the robot on it, published to the dashboard.
   private final Field2d m_field = new Field2d();
+
+  // The pose itself, published as a Pose2d so AdvantageScope's 2D and 3D fields can draw it.
+  private final StructPublisher<Pose2d> m_posePublisher =
+      NetworkTableInstance.getDefault().getStructTopic("Drive/Pose", Pose2d.struct).publish();
 
   /** Creates a new RomiDrivetrain. */
   public RomiDrivetrain() {
@@ -109,6 +115,13 @@ public class RomiDrivetrain extends SubsystemBase implements AutoCloseable {
     return m_odometry.getPoseMeters();
   }
 
+  /** Zero the sensors and put the robot back at the origin, facing +x. */
+  public void resetOdometry() {
+    resetEncoders();
+    resetGyro();
+    m_odometry.resetPosition(getRotation(), 0.0, 0.0, new Pose2d());
+  }
+
   @Override
   public void periodic() {
     // Feed odometry the latest heading and wheel distances (in meters, as WPILib expects).
@@ -117,6 +130,7 @@ public class RomiDrivetrain extends SubsystemBase implements AutoCloseable {
         Units.inchesToMeters(getLeftDistanceInch()),
         Units.inchesToMeters(getRightDistanceInch()));
     m_field.setRobotPose(m_odometry.getPoseMeters());
+    m_posePublisher.set(m_odometry.getPoseMeters());
 
     // Telemetry: numbers worth plotting go to NetworkTables, not the text log.
     SmartDashboard.putNumber("Drive/leftInch", getLeftDistanceInch());
@@ -139,5 +153,6 @@ public class RomiDrivetrain extends SubsystemBase implements AutoCloseable {
     m_rightEncoder.close();
     m_gyro.close();
     m_field.close();
+    m_posePublisher.close();
   }
 }
