@@ -20,6 +20,7 @@ public class Robot extends TimedRobot {
   private final RobotContainer m_robotContainer;
 
   private int m_loopCount = 0;
+  private double minutes = 0;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -54,7 +55,10 @@ public class Robot extends TimedRobot {
     m_loopCount++;
     if (m_loopCount % 50 == 0) {
       double seconds = m_loopCount * 0.02;
-      DataLogManager.log("Heartbeat: loop " + m_loopCount + " at " + seconds + " s");
+      if (seconds >= 60) {
+        minutes = (seconds - (seconds % 60)) / 60;
+      }
+      DataLogManager.log("Uptime " + minutes + ":" + seconds);
     }
   }
 
