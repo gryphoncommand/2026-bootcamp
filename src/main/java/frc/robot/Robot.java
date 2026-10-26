@@ -20,7 +20,8 @@ public class Robot extends TimedRobot {
   private final RobotContainer m_robotContainer;
 
   private int m_loopCount = 0;
-  private double minutes = 0;
+  private int minutes = 0;
+  private String placeholder = "";
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -54,11 +55,21 @@ public class Robot extends TimedRobot {
     // 50 loops is one second, so log once per second, not 50 times.
     m_loopCount++;
     if (m_loopCount % 50 == 0) {
-      double seconds = m_loopCount * 0.02;
+      int seconds = (int) (m_loopCount * 0.02);
+      if (seconds == 60) {
+        DataLogManager.log("One minute of uptime");
+      }
       if (seconds >= 60) {
         minutes = (seconds - (seconds % 60)) / 60;
+        seconds = seconds % 60;
       }
-      DataLogManager.log("Uptime " + minutes + ":" + seconds);
+      if (seconds < 10) {
+        placeholder = "0";
+      }
+      else {
+        placeholder = "";
+      }
+      DataLogManager.log("Uptime " + minutes + ":" + placeholder + seconds);
     }
   }
 
