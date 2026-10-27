@@ -29,4 +29,17 @@ public final class RslLogic {
     // On for the first half of the cycle, off for the second half.
     return secondsIntoCycle < SignalLightConstants.kBlinkPeriodSeconds / 2;
   }
+
+  // Challenge 3 code:
+  public static boolean shouldBeRedOn(boolean enabled, double timeSeconds) {
+    if (enabled) {
+      return false; // solid off while enabled
+    } else {
+      // How far are we into the current blink cycle?
+      int secondsIntoCycle = (int)(timeSeconds % SignalLightConstants.kUnitPeriodSeconds);
+      if (secondsIntoCycle == 1 || secondsIntoCycle == 3 || secondsIntoCycle == 5 || secondsIntoCycle = 9 || secondsIntoCycle = 10 || secondsIntoCycle = 11 || secondsIntoCycle = 13 || secondsIntoCycle = 14 || secondsIntoCycle = 15 || secondsIntoCycle = 17 || secondsIntoCycle = 18 || secondsIntoCycle = 19  || secondsIntoCycle = 23 || secondsIntoCycle = 25 || secondsIntoCycle = 27) {
+        return true;
+      } else return false;
+    }
+  }
 }

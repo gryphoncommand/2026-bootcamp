@@ -48,5 +48,8 @@ public final class Constants {
   public static final class SignalLightConstants {
     /** One full on-then-off blink takes this many seconds while the robot is enabled. */
     public static final double kBlinkPeriodSeconds = 1.0;
+
+    public static final double kSecondsPerUnit = 0.3;
+    public static final double kUnitPeriodSeconds = kSecondsPerUnit*34;
   }
 }

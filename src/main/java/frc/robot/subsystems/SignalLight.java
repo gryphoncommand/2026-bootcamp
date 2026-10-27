@@ -15,7 +15,7 @@ import frc.robot.RslLogic;
  * LED. Here DIO 1 is the green LED and DIO 2 is button C.
  */
 public class SignalLight extends SubsystemBase {
-  private final OnBoardIO m_onboardIO = new OnBoardIO(ChannelMode.OUTPUT, ChannelMode.INPUT);
+  private final OnBoardIO m_onboardIO = new OnBoardIO(ChannelMode.OUTPUT, ChannelMode.OUTPUT);
 
   private boolean m_yellowOn = false;
 
@@ -37,6 +37,12 @@ public class SignalLight extends SubsystemBase {
   public void setGreen(boolean on) {
     m_onboardIO.setGreenLed(on);
   }
+  
+  /** Challenge 3 code: SOS Red Light */
+  public void setRed(boolean on) {
+    m_onboardIO.setRedLed(on);
+  }
+  
 
   /** Whether button A on the Romi is held down. */
   public boolean isButtonAPressed() {
