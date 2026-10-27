@@ -15,7 +15,7 @@ import frc.robot.RslLogic;
  * LED. Here DIO 1 is the green LED and DIO 2 is button C.
  */
 public class SignalLight extends SubsystemBase {
-  private final OnBoardIO m_onboardIO = new OnBoardIO(ChannelMode.OUTPUT, ChannelMode.INPUT);
+  private final OnBoardIO m_onboardIO = new OnBoardIO(ChannelMode.OUTPUT, ChannelMode.OUTPUT);
 
   private boolean m_yellowOn = false;
 
@@ -25,6 +25,7 @@ public class SignalLight extends SubsystemBase {
     boolean enabled = DriverStation.isEnabled();
     double now = Timer.getFPGATimestamp();
     m_yellowOn = RslLogic.shouldBeOn(enabled, now);
+    m_redOn = RslLogic.
     m_onboardIO.setYellowLed(m_yellowOn);
   }
 
@@ -36,6 +37,14 @@ public class SignalLight extends SubsystemBase {
   /** Turns the green LED on or off. Session 4 binds this to a controller button. */
   public void setGreen(boolean on) {
     m_onboardIO.setGreenLed(on);
+  }
+
+  public void setRed(boolean on) {
+    m_onboardIO.setRedLed(on);
+  }
+
+  public boolean isRedOn(){
+    return m_
   }
 
   /** Whether button A on the Romi is held down. */
