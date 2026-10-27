@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.RomiDrivetrain;
 import frc.robot.subsystems.SignalLight;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
  * This class is where the robot is described: its subsystems, its commands, and which controller
@@ -24,7 +25,10 @@ public class RobotContainer {
   }
 
   /** Session 4 fills this in: controller sticks and buttons become commands. */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+    // Pressing A on Romi's control board prints a message.
+    new Trigger(m_signalLight::isButtonAPressed).onTrue(Commands.print("Romi Button A Pressed"));
+  }
 
   /**
    * The command to run in autonomous. Session 6 replaces this with a chooser on the dashboard.
