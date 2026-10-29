@@ -18,8 +18,10 @@ public final class DriveInput {
    * @return the value to use, with tiny wobble removed
    */
   public static double applyDeadband(double rawAxis) {
-    // TODO Session 4: replace this line with the real rule.
-    return 0.0;
+    if (Math.abs(rawAxis) < DriveConstants.kDeadband) {
+      return 0.0;
+    }
+    return rawAxis;
   }
 
   /**
@@ -30,8 +32,7 @@ public final class DriveInput {
    * @return forward speed from -1.0 (full reverse) to 1.0 (full forward)
    */
   public static double forwardSpeed(double rawAxis) {
-    // TODO Session 4: replace this line with the real rule.
-    return 0.0;
+    return -applyDeadband(rawAxis);
   }
 
   /**
@@ -42,7 +43,6 @@ public final class DriveInput {
    * @return rotation speed from -1.0 (clockwise) to 1.0 (counterclockwise)
    */
   public static double rotationSpeed(double rawAxis) {
-    // TODO Session 4: replace this line with the real rule.
-    return 0.0;
+    return -applyDeadband(rawAxis);
   }
 }
