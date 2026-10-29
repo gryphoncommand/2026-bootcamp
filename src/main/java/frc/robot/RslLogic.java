@@ -31,15 +31,15 @@ public final class RslLogic {
   }
 
   // Challenge 3 code:
-  public static boolean shouldBeRedOn(boolean enabled, double timeSeconds) {
+  public static void RedLogic(boolean enabled, double timeSeconds) {
     if (enabled) {
-      return false; // solid off while enabled
+      SignalLight.setRed(false); // solid off while enabled
     } else {
       // How far are we into the current blink cycle?
       int secondsIntoCycle = (int)(timeSeconds % SignalLightConstants.kUnitPeriodSeconds);
       if (secondsIntoCycle == 1 || secondsIntoCycle == 3 || secondsIntoCycle == 5 || secondsIntoCycle = 9 || secondsIntoCycle = 10 || secondsIntoCycle = 11 || secondsIntoCycle = 13 || secondsIntoCycle = 14 || secondsIntoCycle = 15 || secondsIntoCycle = 17 || secondsIntoCycle = 18 || secondsIntoCycle = 19  || secondsIntoCycle = 23 || secondsIntoCycle = 25 || secondsIntoCycle = 27) {
-        return true;
-      } else return false;
+        SignalLight.setRed(true);
+      } else SignalLight.setRed(false);
     }
   }
 }
