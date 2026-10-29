@@ -36,8 +36,8 @@ public final class RslLogic {
       SignalLight.setRed(false); // solid off while enabled
     } else {
       // How far are we into the current blink cycle?
-      int secondsIntoCycle = (int)(timeSeconds % SignalLightConstants.kUnitPeriodSeconds);
-      if (secondsIntoCycle == 1 || secondsIntoCycle == 3 || secondsIntoCycle == 5 || secondsIntoCycle = 9 || secondsIntoCycle = 10 || secondsIntoCycle = 11 || secondsIntoCycle = 13 || secondsIntoCycle = 14 || secondsIntoCycle = 15 || secondsIntoCycle = 17 || secondsIntoCycle = 18 || secondsIntoCycle = 19  || secondsIntoCycle = 23 || secondsIntoCycle = 25 || secondsIntoCycle = 27) {
+      int unitsIntoCycle = (int)((timeSeconds/SignalLightConstants.kSecondsPerUnit) % SignalLightConstants.kUnitPeriodSeconds);
+      if (unitsIntoCycle == 1 || unitsIntoCycle == 3 || unitsIntoCycle == 5 || unitsIntoCycle = 9 || unitsIntoCycle = 10 || unitsIntoCycle = 11 || unitsIntoCycle = 13 || unitsIntoCycle = 14 || unitsIntoCycle = 15 || unitsIntoCycle = 17 || unitsIntoCycle = 18 || unitsIntoCycle = 19  || unitsIntoCycle = 23 || unitsIntoCycle = 25 || unitsIntoCycle = 27) {
         SignalLight.setRed(true);
       } else SignalLight.setRed(false);
     }
