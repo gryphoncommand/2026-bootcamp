@@ -43,4 +43,8 @@ public final class Constants {
     /** One full on-then-off blink takes this many seconds while the robot is enabled. */
     public static final double kBlinkPeriodSeconds = 1.0;
   }
+
+  public static final class LoggingConstants {
+    public static final int secondsLoopCount = 50;
+  }
 }

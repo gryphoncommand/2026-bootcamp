@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.romi.OnBoardIO;
 import edu.wpi.first.wpilibj.romi.OnBoardIO.ChannelMode;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RslLogic;
+import frc.robot.MorseLogic;
 
 /**
  * The LEDs and buttons on the Romi's control board. The yellow LED is our robot signal light.
@@ -17,15 +18,19 @@ import frc.robot.RslLogic;
 public class SignalLight extends SubsystemBase {
   private final OnBoardIO m_onboardIO = new OnBoardIO(ChannelMode.OUTPUT, ChannelMode.OUTPUT);
 
+
   private boolean m_yellowOn = false;
+  private boolean m_redOn = false;
 
   /** Runs 50 times per second in every mode, called by the command scheduler. */
   @Override
   public void periodic() {
-    boolean enabled = DriverStation.isEnabled();
     double now = Timer.getFPGATimestamp();
+
+    boolean enabled = DriverStation.isEnabled();
+  
     m_yellowOn = RslLogic.shouldBeOn(enabled, now);
-    m_redOn = RslLogic.
+    // m_redOn = MorseLogic.shouldBeOn(enabled, now);
     m_onboardIO.setYellowLed(m_yellowOn);
   }
 
@@ -44,7 +49,7 @@ public class SignalLight extends SubsystemBase {
   }
 
   public boolean isRedOn(){
-    return m_
+    return m_redOn;
   }
 
   /** Whether button A on the Romi is held down. */
