@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.romi.OnBoardIO;
 import edu.wpi.first.wpilibj.romi.OnBoardIO.ChannelMode;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RslLogic;
-import frc.robot.MorseLogic;
+// import frc.robot.MorseLogic;
 
 /**
  * The LEDs and buttons on the Romi's control board. The yellow LED is our robot signal light.
@@ -30,8 +30,10 @@ public class SignalLight extends SubsystemBase {
     boolean enabled = DriverStation.isEnabled();
   
     m_yellowOn = RslLogic.shouldBeOn(enabled, now);
-    // m_redOn = MorseLogic.shouldBeOn(enabled, now);
+    // Leaving this on when disabled until I can get the morse section working
+    m_redOn = !enabled;
     m_onboardIO.setYellowLed(m_yellowOn);
+    m_onboardIO.setRedLed(m_redOn);
   }
 
   /** Whether the yellow LED is on right now. */

@@ -20,7 +20,9 @@ public final class MorseLogic {
     DataLogManager.log("Disabled. Sending emergency message!");
   }
 
-private static int m_unitsPassed = 0;
+private int m_unitsPassed = 0;
+private int m_lastUnit = -1; // -1 so the very first call counts as a new unit
+
 
   /** Each letter maps to its Morse code: "." is a dot and "-" is a dash. */
   private static final Map<Character, String[]> LETTERS = new HashMap<>();
@@ -54,8 +56,17 @@ private static int m_unitsPassed = 0;
     LETTERS.put('Z', new String[] { "-", "-", ".", "." });
   }
 
+  private void print(String message){
+      DataLogManager.log(message);
+  }
+
   public void sendMessage(int time, String message) {
     m_unitsPassed = time / 40;
+    // Set the boolean before we set the value
+    boolean newUnit = m_unitsPassed != m_lastUnit;
+
+    // Set the value so that they are kept in sync but not until we hit the next value
+    m_lastUnit = m_unitsPassed;
 
     // every .2 seconds print something
     int lettersToShow = m_unitsPassed % (message.length() + 1);
@@ -66,14 +77,26 @@ private static int m_unitsPassed = 0;
     }
     SmartDashboard.putString("Emergency Message", shown);
 
-    if (time % 40 == 0){
-      DataLogManager.log("Letter we are currently printing" + message.charAt(lettersToShow % message.length()));
+    // Step 0 of each cycle shows no letters: that is the pause between words.
+    if (lettersToShow == 0) {
+      if (newUnit) {
+        print("Pause between words");
+      }
+      return;
     }
-    var currentLetter = message.charAt(lettersToShow % message.length());
+
+    // The letter being sent is the last one shown on the dashboard.
+    var currentLetter = message.charAt(lettersToShow - 1);
     var morseLetter = LETTERS.get(currentLetter);
-    
-    if (time % 40 == 0){
-      DataLogManager.log("Morse code we are currently printing" + morseLetter.toString());
+
+    if (newUnit){
+      print("Letter we are currently printing" + currentLetter);
+
+      var printLetter = "";
+      for (String letter : morseLetter) {
+        printLetter += letter + " ";
+      }
+      print("Morse code we are currently printing" + printLetter);
     }
 
 
