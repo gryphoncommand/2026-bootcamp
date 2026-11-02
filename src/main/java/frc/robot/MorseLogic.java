@@ -24,11 +24,13 @@ public final class MorseLogic {
 
   public MorseLogic(String disabledMessage){
     m_lightStatus = generateEncoding(disabledMessage);
+    m_unitLabels = generateLabels(disabledMessage);
   }
 
   private int m_unitsPassed = 0;
   private int m_lastUnit = -1; // -1 so the very first call counts as a new unit
   private List<Integer> m_lightStatus = new ArrayList<Integer>();
+  private List<String> m_unitLabels = new ArrayList<String>();
 
   /** Each letter maps to its Morse code: "." is a dot and "-" is a dash. */
   private static final Map<Character, String[]> LETTERS = new HashMap<>();
@@ -76,9 +78,9 @@ public final class MorseLogic {
       var morseLetter = LETTERS.get(letter);
 
       for (String symbolString : morseLetter) {
-        if (symbolString == ".") {
+        if (symbolString.equals(".")) {
           signals.add(1);
-        } else if (symbolString == "-") {
+        } else if (symbolString.equals("-")) {
           signals.addAll(List.of(1, 1, 1));
         }
         // Add the gap between each '.' and '-'
@@ -89,7 +91,42 @@ public final class MorseLogic {
     }
     // After each word add 4 0s. Same issue as above both gaps get added
     signals.addAll(List.of(0, 0, 0, 0));
-    return signals; 
+    return signals;
+  }
+
+  /**
+   * Makes one label for each unit, lined up with generateEncoding. A dash gets its label 3 times
+   * because it lasts 3 units.
+   */
+  public List<String> generateLabels(String message) {
+    List<String> labels = new ArrayList<String>();
+
+    for (int i = 0; i < message.length(); i++) {
+      char letter = message.charAt(i);
+      String[] morseLetter = LETTERS.get(letter);
+      // Grows as each symbol is sent: "S .", then "S . .", then "S . . ."
+      String sentSoFar = "" + letter;
+
+      for (int j = 0; j < morseLetter.length; j++) {
+        sentSoFar += " " + morseLetter[j];
+        // A dot is on for 1 unit, a dash for 3
+        int unitsOn = morseLetter[j].equals("-") ? 3 : 1;
+        for (int k = 0; k < unitsOn; k++) {
+          labels.add(sentSoFar);
+        }
+        // Gap between symbols, but not after the letter's last symbol
+        if (j < morseLetter.length - 1) {
+          labels.add("symbol gap");
+        }
+      }
+      // Gap between letters, but not after the last letter
+      if (i < message.length() - 1) {
+        labels.addAll(List.of("letter gap", "letter gap", "letter gap"));
+      }
+    }
+    labels.addAll(List.of("word gap", "word gap", "word gap", "word gap",
+        "word gap", "word gap", "word gap"));
+    return labels;
   }
 
   public void sendMessage(int time, String message) {
@@ -147,5 +184,11 @@ public final class MorseLogic {
     // Each unit lasts 40 loops. % wraps back to the start when the message ends.
     int unit = (loopCount / 40) % m_lightStatus.size();
     return m_lightStatus.get(unit) == 1;
+  }
+
+  /** What the light is sending right now, like "S . ." or "letter gap". */
+  public String currentSymbol(int loopCount) {
+    int unit = (loopCount / 40) % m_unitLabels.size();
+    return m_unitLabels.get(unit);
   }
 }

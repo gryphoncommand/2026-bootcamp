@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.romi.OnBoardIO;
 import edu.wpi.first.wpilibj.romi.OnBoardIO.ChannelMode;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.MorseLogic;
 import frc.robot.RslLogic;
@@ -38,6 +39,8 @@ public class SignalLight extends SubsystemBase {
 
     m_yellowOn = RslLogic.shouldBeOn(enabled, now);
     m_redOn = m_morseLogic.shouldBeOn(enabled, m_loopCountDisabled);
+    SmartDashboard.putBoolean("Red LED", m_redOn);
+    SmartDashboard.putString("Morse Symbol", m_morseLogic.currentSymbol(m_loopCountDisabled));
     m_onboardIO.setYellowLed(m_yellowOn);
     m_onboardIO.setRedLed(m_redOn);
   }

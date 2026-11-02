@@ -21,7 +21,6 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private final RobotContainer m_robotContainer;
-  private final MorseLogic m_morseLogic;
 
   // Counts every 20 ms loop since the program started. An attribute, so it keeps
   // its value.
@@ -46,7 +45,6 @@ public class Robot extends TimedRobot {
     // and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    m_morseLogic = new MorseLogic("SOS");
   }
 
   /**
@@ -102,7 +100,6 @@ public class Robot extends TimedRobot {
       if (m_loopCount % Constants.LoggingConstants.secondsLoopCount == 0) {
         SmartDashboard.putString("Disabled", minutes + ":" + (seconds < 10 ? "0" : "") + seconds);
       }
-      m_morseLogic.sendMessage(m_loopCountDisabled, "SOS");
     }
 
   }

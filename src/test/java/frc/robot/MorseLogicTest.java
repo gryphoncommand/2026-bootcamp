@@ -60,4 +60,39 @@ class MorseLogicTest {
     assertFalse(morse.shouldBeOn(true, 10));
     assertFalse(morse.shouldBeOn(true, 500));
   }
+
+  @Test
+  void sosLabelsMatchEachUnit() {
+    MorseLogic morse = new MorseLogic("SOS");
+
+    List<String> expected =
+        List.of(
+            // S
+            "S .", "symbol gap", "S . .", "symbol gap", "S . . .",
+            "letter gap", "letter gap", "letter gap",
+            // O
+            "O -", "O -", "O -", "symbol gap",
+            "O - -", "O - -", "O - -", "symbol gap",
+            "O - - -", "O - - -", "O - - -",
+            "letter gap", "letter gap", "letter gap",
+            // S
+            "S .", "symbol gap", "S . .", "symbol gap", "S . . .",
+            // End of the word
+            "word gap", "word gap", "word gap", "word gap",
+            "word gap", "word gap", "word gap");
+
+    assertEquals(expected, morse.generateLabels("SOS"));
+  }
+
+  @Test
+  void currentSymbolMatchesLight() {
+    MorseLogic morse = new MorseLogic("SOS");
+    int loopsInMessage = morse.generateEncoding("SOS").size() * LOOPS_PER_UNIT;
+
+    // When the light is off the label is a gap, and when it is on it is not.
+    for (int loop = 0; loop < loopsInMessage; loop++) {
+      boolean isGap = morse.currentSymbol(loop).endsWith("gap");
+      assertEquals(!isGap, morse.shouldBeOn(false, loop), "loop " + loop);
+    }
+  }
 }
