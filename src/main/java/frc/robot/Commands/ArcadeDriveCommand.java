@@ -44,6 +44,7 @@ public class ArcadeDriveCommand extends Command {
         m_drivetrain.arcadeDrive(0.0, 0.0);
     }
 
+    /** Driving never finishes on its own. Another command interrupts it. */
     @Override
     public boolean isFinished() {
         return false;
