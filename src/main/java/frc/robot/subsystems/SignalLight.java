@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.romi.OnBoardIO;
 import edu.wpi.first.wpilibj.romi.OnBoardIO.ChannelMode;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.MorseLogic;
 import frc.robot.RslLogic;
 // import frc.robot.MorseLogic;
 
@@ -17,10 +18,13 @@ import frc.robot.RslLogic;
  */
 public class SignalLight extends SubsystemBase {
   private final OnBoardIO m_onboardIO = new OnBoardIO(ChannelMode.OUTPUT, ChannelMode.OUTPUT);
+  private final MorseLogic m_morseLogic = new MorseLogic("SOS");
 
 
   private boolean m_yellowOn = false;
   private boolean m_redOn = false;
+  // Counts periodic() calls while disabled. 50 loops is one second.
+  private int m_loopCountDisabled = 0;
 
   /** Runs 50 times per second in every mode, called by the command scheduler. */
   @Override
@@ -28,10 +32,12 @@ public class SignalLight extends SubsystemBase {
     double now = Timer.getFPGATimestamp();
 
     boolean enabled = DriverStation.isEnabled();
-  
+    if (!enabled) {
+      m_loopCountDisabled++;
+    }
+
     m_yellowOn = RslLogic.shouldBeOn(enabled, now);
-    // Leaving this on when disabled until I can get the morse section working
-    m_redOn = !enabled;
+    m_redOn = m_morseLogic.shouldBeOn(enabled, m_loopCountDisabled);
     m_onboardIO.setYellowLed(m_yellowOn);
     m_onboardIO.setRedLed(m_redOn);
   }

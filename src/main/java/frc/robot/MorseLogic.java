@@ -3,6 +3,8 @@ package frc.robot;
 import frc.robot.Constants.SignalLightConstants;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -20,9 +22,13 @@ public final class MorseLogic {
     DataLogManager.log("Disabled. Sending emergency message!");
   }
 
-private int m_unitsPassed = 0;
-private int m_lastUnit = -1; // -1 so the very first call counts as a new unit
+  public MorseLogic(String disabledMessage){
+    m_lightStatus = generateEncoding(disabledMessage);
+  }
 
+  private int m_unitsPassed = 0;
+  private int m_lastUnit = -1; // -1 so the very first call counts as a new unit
+  private List<Integer> m_lightStatus = new ArrayList<Integer>();
 
   /** Each letter maps to its Morse code: "." is a dot and "-" is a dash. */
   private static final Map<Character, String[]> LETTERS = new HashMap<>();
@@ -56,8 +62,34 @@ private int m_lastUnit = -1; // -1 so the very first call counts as a new unit
     LETTERS.put('Z', new String[] { "-", "-", ".", "." });
   }
 
-  private void print(String message){
-      DataLogManager.log(message);
+  private void print(String message) {
+    DataLogManager.log(message);
+  }
+
+  public List<Integer> generateEncoding(String message) {
+    List<Integer> signals = new ArrayList<Integer>();
+
+    // This will be an individual Letter IE 'S'
+    for (char letter : message.toCharArray()) {
+
+      // A single symbol "." or "-"
+      var morseLetter = LETTERS.get(letter);
+
+      for (String symbolString : morseLetter) {
+        if (symbolString == ".") {
+          signals.add(1);
+        } else if (symbolString == "-") {
+          signals.addAll(List.of(1, 1, 1));
+        }
+        // Add the gap between each '.' and '-'
+        signals.add(0);
+      }
+      // Add a gap of 0 0 after each symbol. There is already one from the gap between words
+        signals.addAll(List.of(0, 0));
+    }
+    // After each word add 4 0s. Same issue as above both gaps get added
+    signals.addAll(List.of(0, 0, 0, 0));
+    return signals; 
   }
 
   public void sendMessage(int time, String message) {
@@ -65,7 +97,8 @@ private int m_lastUnit = -1; // -1 so the very first call counts as a new unit
     // Set the boolean before we set the value
     boolean newUnit = m_unitsPassed != m_lastUnit;
 
-    // Set the value so that they are kept in sync but not until we hit the next value
+    // Set the value so that they are kept in sync but not until we hit the next
+    // value
     m_lastUnit = m_unitsPassed;
 
     // every .2 seconds print something
@@ -89,16 +122,30 @@ private int m_lastUnit = -1; // -1 so the very first call counts as a new unit
     var currentLetter = message.charAt(lettersToShow - 1);
     var morseLetter = LETTERS.get(currentLetter);
 
-    if (newUnit){
+    if (newUnit) {
       print("Letter we are currently printing" + currentLetter);
-
       var printLetter = "";
       for (String letter : morseLetter) {
         printLetter += letter + " ";
       }
+
       print("Morse code we are currently printing" + printLetter);
     }
+  }
 
-
+  /**
+   * This handles the logic displaying a message when disabled. 
+   * It changes status every .4 seconds 
+   * @param enabled true when the robot is enabled
+   * @param loopCount how many 20 ms loops have run (50 loops is one second)
+   * @return true when the light should be on
+   */
+  public boolean shouldBeOn(boolean enabled, int loopCount) {
+    if (enabled) {
+      return false; // solid off while enabled
+    }
+    // Each unit lasts 40 loops. % wraps back to the start when the message ends.
+    int unit = (loopCount / 40) % m_lightStatus.size();
+    return m_lightStatus.get(unit) == 1;
   }
 }
