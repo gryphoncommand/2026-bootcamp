@@ -18,6 +18,7 @@ public class SignalLight extends SubsystemBase {
   private final OnBoardIO m_onboardIO = new OnBoardIO(ChannelMode.OUTPUT, ChannelMode.OUTPUT);
 
   private boolean m_yellowOn = false;
+  private boolean m_redOn = false;
 
   /** Runs 50 times per second in every mode, called by the command scheduler. */
   @Override
@@ -25,7 +26,9 @@ public class SignalLight extends SubsystemBase {
     boolean enabled = DriverStation.isEnabled();
     double now = Timer.getFPGATimestamp();
     m_yellowOn = RslLogic.shouldBeOn(enabled, now);
+    m_redOn = RslLogic.shouldRedBeOn(enabled, now);
     m_onboardIO.setYellowLed(m_yellowOn);
+    m_onboardIO.setRedLed(m_redOn);
   }
 
   /** Whether the yellow LED is on right now. */
@@ -37,12 +40,6 @@ public class SignalLight extends SubsystemBase {
   public void setGreen(boolean on) {
     m_onboardIO.setGreenLed(on);
   }
-  
-  /** Challenge 3 code: SOS Red Light */
-  public void setRed(boolean on) {
-    m_onboardIO.setRedLed(on);
-  }
-  
 
   /** Whether button A on the Romi is held down. */
   public boolean isButtonAPressed() {
