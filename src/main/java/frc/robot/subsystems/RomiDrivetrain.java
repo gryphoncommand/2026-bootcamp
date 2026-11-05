@@ -62,6 +62,11 @@ public class RomiDrivetrain extends SubsystemBase implements AutoCloseable {
     return m_rightEncoder.getDistance();
   }
 
+  /** Average of both wheels: how far the robot has driven straight ahead. */
+  public double getAverageDistanceInch() {
+    return (getRightDistanceInch() + getLeftDistanceInch()) / 2.0;
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
