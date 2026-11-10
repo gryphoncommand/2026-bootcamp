@@ -2,11 +2,9 @@ package frc.robot;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /** Checks the stick-to-speed math. Decimal numbers are compared within a tiny tolerance. */
-@Disabled("Session 4: delete this line, then make these tests pass")
 class DriveInputTest {
   static final double DELTA = 1e-9;
 

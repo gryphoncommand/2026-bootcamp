@@ -16,17 +16,20 @@ import org.junit.jupiter.api.Test;
  */
 class RomiDrivetrainTest {
   static final double DELTA = 1e-6;
+  static final double CIRCUMFERENCE_INCH = Math.PI * DriveConstants.kWheelDiameterInch;
 
   RomiDrivetrain m_drivetrain;
   EncoderSim m_leftEncoderSim;
+  EncoderSim m_rightEncoderSim;
 
   /** Runs before every test: start the simulated hardware and build a fresh drivetrain. */
   @BeforeEach
   void setUp() {
     assertTrue(HAL.initialize(500, 0));
     m_drivetrain = new RomiDrivetrain();
-    // The simulated encoder must be looked up after the drivetrain creates the real one.
+    // The simulated encoders must be looked up after the drivetrain creates the real ones.
     m_leftEncoderSim = EncoderSim.createForChannel(DriveConstants.kLeftEncoderChannelA);
+    m_rightEncoderSim = EncoderSim.createForChannel(DriveConstants.kRightEncoderChannelA);
   }
 
   /** Runs after every test: free the hardware so the next test can create it again. */
@@ -39,8 +42,7 @@ class RomiDrivetrainTest {
   void oneWheelTurnIsOneCircumference() {
     m_leftEncoderSim.setCount((int) DriveConstants.kCountsPerRevolution);
 
-    double circumferenceInch = Math.PI * DriveConstants.kWheelDiameterInch;
-    assertEquals(circumferenceInch, m_drivetrain.getLeftDistanceInch(), DELTA);
+    assertEquals(CIRCUMFERENCE_INCH, m_drivetrain.getLeftDistanceInch(), DELTA);
   }
 
   @Test
@@ -50,5 +52,20 @@ class RomiDrivetrainTest {
     m_drivetrain.resetEncoders();
 
     assertEquals(0.0, m_drivetrain.getLeftDistanceInch(), DELTA);
+  }
+
+  @Test
+  void halfATurnOnTheRightWheelIsHalfACircumference() {
+    m_rightEncoderSim.setCount(720);
+
+    assertEquals(CIRCUMFERENCE_INCH / 2.0, m_drivetrain.getRightDistanceInch(), DELTA);
+  }
+
+  @Test
+  void averageDistanceIsTheMeanOfBothWheels() {
+    m_leftEncoderSim.setCount(1440);
+    m_rightEncoderSim.setCount(0);
+
+    assertEquals(CIRCUMFERENCE_INCH / 2.0, m_drivetrain.getAverageDistanceInch(), DELTA);
   }
 }
